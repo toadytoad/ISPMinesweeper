@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="lib">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/Ready/libs/j2sdk1.4.2_01/lib/htmlconverter.jar!/" />
+      <root url="jar://$PROJECT_DIR$/Ready/libs/j2sdk1.4.2_01/lib/dt.jar!/" />
+      <root url="jar://$PROJECT_DIR$/Ready/libs/j2sdk1.4.2_01/lib/tools.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

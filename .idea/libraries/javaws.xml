@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="javaws">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/Ready/libs/j2sdk1.4.2_01/jre/javaws/javaws-l10n.jar!/" />
+      <root url="jar://$PROJECT_DIR$/Ready/libs/j2sdk1.4.2_01/jre/javaws/javaws.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

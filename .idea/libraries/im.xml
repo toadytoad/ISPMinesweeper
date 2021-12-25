@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="im">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/Ready/libs/j2sdk1.4.2_01/jre/lib/im/thaiim.jar!/" />
+      <root url="jar://$PROJECT_DIR$/Ready/libs/j2sdk1.4.2_01/jre/lib/im/indicim.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

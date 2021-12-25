@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="HSA-deps">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/Ready/libs/HSA-deps.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
