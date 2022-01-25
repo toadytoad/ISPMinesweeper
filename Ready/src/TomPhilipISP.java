@@ -1,5 +1,6 @@
 import hsa.Console;
 import java.awt.*;
+import java.io.*;
 import java.util.Random;
 
 public class TomPhilipISP {
@@ -10,7 +11,7 @@ public class TomPhilipISP {
     boolean[][] bombs;
     boolean[][] revealed;
     boolean[][] flagged;
-    int menu = 4;
+    int menu = 0;
     boolean cheat;
     public TomPhilipISP(){
         c = new Console("Minesweeper");
@@ -19,9 +20,75 @@ public class TomPhilipISP {
 
     }
     public void mainMenu(){
+        c.close();
+        c = new Console("Minesweeper - Main Menu");
+        c.setColor(Color.gray);
+        c.fillRect(0, 0, 640, 500);
+        c.setColor(Color.black);
+        c.setFont(new Font("Ariel", Font.BOLD, 40));
+        c.drawString("Minesweeper", 180, 50);
+        c.setFont(new Font("Ariel", Font.BOLD, 30));
+        c.setColor(Color.red);
+        c.drawString("Level selection", 200, 100);
+        c.setColor(Color.black);
+        c.drawString("Instructions", 220, 150);
+        c.drawString("Scores", 255, 200);
+        c.drawString("Quit", 280, 250);
+        int item = 0;
+        while(true){
+            char ch = c.getChar();
+
+            switch(ch){
+                case 's': {
+                    if(item!=3) item++;
+                    break;
+                } case 'w': {
+                    if(item!=0) item--;
+                    break;
+                } case 'r': {
+                    if(item ==0){
+
+                        while(true){
+                            char chr = c.getChar();
+                            if(chr == '1') {
+                                menu =3;
+                                return;
+                            } else if(chr == '2'){
+                                menu = 4;
+                                return;
+                            } else if(chr == '3'){
+                                menu = 4;
+                                return;
+                            } else if(chr == 'b') break;
+                        }
+                    } else if (item ==1){
+                        menu = 1;
+                        return;
+                    } else if (item == 2){
+                        menu = 2;
+                        return;
+                    } else {
+                        menu = -1;
+                        return;
+                    }
+                }
+            }
+            if(item != 0) c.setColor(Color.black);
+            else c.setColor(Color.red);
+            c.drawString("Level selection", 200, 100);
+            if(item != 1) c.setColor(Color.black);
+            else c.setColor(Color.red);
+            c.drawString("Instructions", 220, 150);
+            if(item != 2) c.setColor(Color.black);
+            else c.setColor(Color.red);
+            c.drawString("Scores", 255, 200);
+            if(item != 3) c.setColor(Color.black);
+            else c.setColor(Color.red);
+            c.drawString("Quit", 280, 250);
+        }
 
     }
-    public void easy(){
+    public void easy()throws IOException{
         //8 by 8 board 9 bombs
         c.close(); //close the main menu screen
         c= new Console(16, 40,"Minesweeper - Easy"); //initialize a new console with the proper size
@@ -78,6 +145,7 @@ public class TomPhilipISP {
                         move(currentX, currentY);
 
                     }
+                    if(flagged[currentX][currentY]) break;
                     if(cheat){
                         floodFill(currentX, currentY);
                     } else {
@@ -85,7 +153,7 @@ public class TomPhilipISP {
                             revealAll();
                             updateAll();
                             c.getChar();
-                            System.out.println("Clicked Bomb!");
+                            endGame(false, startTime);
                             return;
 
                         } else {
@@ -95,12 +163,13 @@ public class TomPhilipISP {
                     first = false;
                     break;
                 } case 'f': {
-                    if(!revealed[currentX][currentY]){
-                        flagged[currentX][currentY] = true;
-                    }
+
+                    flagged[currentX][currentY] ^= true;
+                    drawSquare(currentX, currentY);
+
                     break;
                 } case 'e': {
-
+                    menu = 0;
                     return;
                 } case 'c': {
                     cheat = !cheat;
@@ -121,10 +190,10 @@ public class TomPhilipISP {
             }
         }
     }
-    public void medium(){
+    public void medium() throws IOException{
         //12 by 24 board 20%
         c.close(); //close the main menu screen
-        c= new Console(24, 120,"Minesweeper - Easy"); //initialize a new console with the proper size
+        c= new Console(24, 120,"Minesweeper - Medium"); //initialize a new console with the proper size
         int[][][] arr = populate(2); //get the populating data
         revealed = new boolean[24][12]; //initialize the game arrays
         bombs = new boolean[24][12];
@@ -178,6 +247,7 @@ public class TomPhilipISP {
                         move(currentX, currentY);
 
                     }
+                    if(flagged[currentX][currentY]) break;
                     if(cheat){
                         floodFill(currentX, currentY);
                     } else {
@@ -185,7 +255,7 @@ public class TomPhilipISP {
                             revealAll();
                             updateAll();
                             c.getChar();
-                            System.out.println("Clicked Bomb!");
+                            endGame(false, startTime);
                             return;
 
                         } else {
@@ -196,12 +266,12 @@ public class TomPhilipISP {
                     break;
                 } case 'f': {
 
-                        flagged[currentX][currentY] ^= true;
-                        drawSquare(currentX, currentY);
+                    flagged[currentX][currentY] ^= true;
+                    drawSquare(currentX, currentY);
 
                     break;
                 } case 'e': {
-
+                    menu = 0;
                     return;
                 } case 'c': {
                     cheat = !cheat;
@@ -222,20 +292,120 @@ public class TomPhilipISP {
             }
         }
     }
-    public void hard(){
+    public void hard() throws IOException{
         //18 by 30 board 25%
+        c.close(); //close the main menu screen
+        c= new Console(36, 150,"Minesweeper - Hard"); //initialize a new console with the proper size
+        int[][][] arr = populate(3); //get the populating data
+        revealed = new boolean[30][18]; //initialize the game arrays
+        bombs = new boolean[30][18];
+        flagged = new boolean[30][18];
+        surrounding = new int[30][18];
+        for(int i = 0; i<30; i++){ //add all the values from populate() into the gam arrays.
+            for(int j = 0; j<18; j++){
+                bombs[i][j] = arr[1][i][j]==1;
+                surrounding[i][j] = arr[0][i][j];
+            }
+        }
+        currentX = 0; //more initializing
+        currentY = 0;
+        cheat = false;
+        boolean first = true; //used to detect whether it is the first move
+        long startTime = System.currentTimeMillis();
+        updateAll();
+        while(true){
+            char ch = c.getChar();
+            switch(ch){
+                case 'w': {
+                    if(currentY!=0) {
+                        currentY--;
+                        drawSquare(currentX, currentY);
+                        drawSquare(currentX, currentY+1);
+                    }
+                    break;
+                } case 'a': {
+                    if(currentX!=0) {
+                        currentX--;
+                        drawSquare(currentX, currentY);
+                        drawSquare(currentX+1, currentY);
+                    }
+                    break;
+                } case 's': {
+                    if(currentY!=17) {
+                        currentY++;
+                        drawSquare(currentX, currentY);
+                        drawSquare(currentX, currentY-1);
+                    }
+                    break;
+                } case 'd': {
+                    if(currentX!=29) {
+                        currentX++;
+                        drawSquare(currentX, currentY);
+                        drawSquare(currentX-1, currentY);
+                    }
+                    break;
+                } case 'r': {
+                    if(first&&bombs[currentX][currentY]){
+                        move(currentX, currentY);
+
+                    }
+                    if(flagged[currentX][currentY]) break;
+                    if(cheat){
+                        floodFill(currentX, currentY);
+                    } else {
+                        if(bombs[currentX][currentY]){
+                            revealAll();
+                            updateAll();
+                            c.getChar();
+                            endGame(false, startTime);
+                            return;
+
+                        } else {
+                            floodFill(currentX, currentY);
+                        }
+                    }
+                    first = false;
+                    break;
+                } case 'f': {
+
+                    flagged[currentX][currentY] ^= true;
+                    drawSquare(currentX, currentY);
+
+                    break;
+                } case 'e': {
+                    menu = 0;
+                    return;
+                } case 'c': {
+                    cheat = !cheat;
+                }
+
+            }
+            int count = 0;
+            for(int i = 0; i<30; i++){
+                for(int j = 0; j<18; j++){
+                    if(revealed[i][j]&&!bombs[i][j]){
+                        count++;
+                    }
+                }
+            }
+            if(count==30*18-115){
+                endGame(true, startTime);
+                return;
+            }
+        }
     }
-    public void displayScores(){
+    public void displayScores() throws IOException {
+        BufferedReader br = new BufferedReader(new FileReader("scores.txt"));
+        c.setColor(Color.gray);
+        c.fillRect(0, 0, 640, 500);
 
     }
     public void instructions(){
-
     }
     public void goodBye(){
-
+        System.exit(0);
     }
     private void pauseProgram(){
-        c.print("Press any key to continue: ");
         c.readChar();
     }
     private void updateAll(){
@@ -485,14 +655,53 @@ public class TomPhilipISP {
             }
         }
     }
-    private void addScore(String score){
-
+    private void addScore(String score) throws IOException{
+        PrintWriter pr = new PrintWriter(new BufferedWriter(new FileWriter("scores.txt", true)));
+        pr.println(score);
+        pr.close();
     }
-    private void endGame(boolean won, long startTime){
-        long endTime = System.currentTimeMillis();
+    private void endGame(boolean won, long startTime) throws IOException{
+        long endTime = System.currentTimeMillis()-startTime;
+        String milli = String.valueOf(endTime%1000);
+        endTime/=1000;
+        String sec = String.valueOf(endTime%60);
+        endTime/=60;
+        String min = String.valueOf(endTime%60);
+        endTime/=60;
+        String hour = String.valueOf(endTime);
+        c.close();
+        String time = hour+":"+min+":"+sec+"."+milli;
+        if(won) {
+            c = new Console("Game Over - You Win!");
+        } else c = new Console("Game Over - You Lose.");
+        c.setColor(Color.gray);
+        c.fillRect(0, 0, 640, 500);
+        if(won){
+            c.setColor(Color.black);
+            c.setFont(new Font("Ariel", Font.BOLD, 40));
+            c.drawString("You Win!", 250, 50);
+            c.drawString("Time", 280, 150);
+            c.drawString(time, 320-time.length()*9, 250);
+            c.drawString("Name:", 100, 350);
+            StringBuffer name = new StringBuffer();
+            char ch;
+            do{
+                ch = c.getChar();
+                if(ch == 8){
+                    if(name.length()>1)
+                    name.deleteCharAt(name.length()-1);
+                } else {
+                    name.append(ch);
+                }
+            } while(ch!=10);
+            addScore(name.toString()+" "+time);
+        }
+        addScore(time);
+        pauseProgram();
+        menu = 0;
     }
 
-    public static void main(String[] args){
+    public static void main(String[] args)throws IOException{
         TomPhilipISP t = new TomPhilipISP();
         t.splashScreen();
         while(t.menu!=-1){
